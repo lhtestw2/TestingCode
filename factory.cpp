@@ -16,6 +16,7 @@ class MoreTest {
     MoreTest() : a(1), b(2.2) {}
     void print() {}
     void print2() {}
+    void print3() {}
     void print1() {}
 };
 
