@@ -19,6 +19,7 @@ class MoreTest {
     void print3() {}
     void print1() {}
     void add_func() {}
+    void add_func1() { std::cout << "This is a test about snap." << std::endl; }
 };
 
 
