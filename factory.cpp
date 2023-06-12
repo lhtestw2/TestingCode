@@ -15,6 +15,7 @@ class MoreTest {
     double b;
     MoreTest() : a(1), b(2.2) {}
     void print() { std::cout << "MoreTest" << std::endl; }
+    void print3() { std::cout << "This is print3" << std::endl; }
 };
 
 
