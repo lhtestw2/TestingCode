@@ -11,7 +11,7 @@ public:
 };
 
 class MoreTest {
-    double a;
+    int a;
     double b;
     MoreTest() : a(1.2), b(2.2) {}
 };
