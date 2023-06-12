@@ -18,6 +18,7 @@ class MoreTest {
     void print2() {}
     void print3() {}
     void print1() {}
+    void add_func() {}
 };
 
 
