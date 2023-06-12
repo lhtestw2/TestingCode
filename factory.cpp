@@ -13,7 +13,8 @@ public:
 class MoreTest {
     int a;
     double b;
-    MoreTest() : a(1.2), b(2.2) {}
+    MoreTest() : a(1), b(2.2) {}
+    void print() { std::cout << "MoreTest" << std::endl; }
 };
 
 
