@@ -5,9 +5,9 @@
 
 class ATest {
 public:
-    int a;
+    float a;
     int b;
-    ATest() : a(1), b(2) {}
+    ATest() : a(1.0), b(2) {}
 };
 
 class MoreTest {
