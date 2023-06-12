@@ -14,7 +14,7 @@ class MoreTest {
     int a;
     double b;
     MoreTest() : a(1), b(2.2) {}
-    void print() {}
+    void print() { std::cout << "this is a modify print" << std::endl; }
     void print2() {}
     void print3() {}
     void print1() {}
