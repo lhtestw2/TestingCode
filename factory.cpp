@@ -14,6 +14,8 @@ class MoreTest {
     int a;
     double b;
     MoreTest() : a(1), b(2.2) {}
+    void print() {}
+    void print1() {}
 };
 
 
