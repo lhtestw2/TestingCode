@@ -3,11 +3,19 @@
  */
 #include <iostream>
 
+#define TEST 1
+
 class ATest {
 public:
     float a;
     int b;
     ATest() : a(1.0), b(2) {}
+};
+
+class BTest : virtual public ATest {
+public:
+    float c;
+    BTest(float c) : ATest(), c(c) {}
 };
 
 class MoreTest {
@@ -27,5 +35,8 @@ int main()
 {
     ATest atest;
     std::cout << atest.a << ' ' << atest.b << std::endl;
+    std::cout << 2 << std::endl;
+    BTest btest(1.2);
+    std::cout << btest.a << ' ' << btest.b << ' ' << btest.c << std::endl;
     return 0;
 }
