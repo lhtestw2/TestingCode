@@ -83,6 +83,37 @@ std::string UTF8TOGB(std::string &str) {
     return result;
 }
 
+class Question {
+public:
+    Question(std::string &path) {
+        std::ifstream infile;
+        infile.open(path);
+        std::string str;
+        while (std::getline(infile, str)) {
+            if (str.length()) {
+                keys.push_back(UTF8TOGB(str));
+            }
+        }
+        for (auto &p : keys) {
+            std::cout << p << std::endl;
+        }
+    }
+    bool is_question(std::string str) {
+
+        return std::any_of(keys.cbegin(), keys.cend(), [&str](const std::string key) {
+            return str.find(key) >= 0;
+        });
+    }
+private:
+    std::vector<std::string> keys;
+};
+bool is_question(std::string &str) {
+    // std::string s("？");
+    // if (str.find("?") >= 0 || str.find(UTF8TOGB(s)) >= 0) {
+    //     return true;
+    // }
+    return false;
+}
 int main()
 {
     // ATest atest;
@@ -95,12 +126,15 @@ int main()
     std::ifstream infile;
     infile.open("./files/file1.txt");
     std::string str;
+    std::string key_path("./keys.txt");
+    Question q(key_path);
     while (std::getline(infile, str))
     {
     //    int s = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, NULL, 0);
     //    std::cout << s << std::endl;
        std::cout << str << std::endl;
        std::cout << UTF8TOGB(str) << std::endl;
+       std::cout << (q.is_question(UTF8TOGB(str)) ? "True" : "False") << std::endl;
     }
     
 
