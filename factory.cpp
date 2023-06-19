@@ -9,6 +9,8 @@
 #include <map>
 #include <fstream>
 #include <windows.h>
+#include <io.h>
+#include <regex>
 
 
 
@@ -83,6 +85,22 @@ std::string UTF8TOGB(std::string &str) {
     return result;
 }
 
+
+std::vector<std::string> walk_through(std::string path) {
+    std::vector<std::string> res;
+    std::string findFile = path + std::string("\\*");
+    _finddata_t FileInfo;
+    long handle_ = _findfirst(findFile.c_str(), &FileInfo);
+    do {
+        auto file_name = std::string(FileInfo.name);
+        if (file_name != ".." && file_name != ".") {
+            res.push_back(path + std::string("\\") + file_name);
+        }
+    } while (_findnext(handle_, &FileInfo) == 0);
+    return res;
+}
+
+
 class Question {
 public:
     Question(std::string &path) {
@@ -101,19 +119,14 @@ public:
     bool is_question(std::string str) {
 
         return std::any_of(keys.cbegin(), keys.cend(), [&str](const std::string key) {
-            return str.find(key) >= 0;
+            return str.find(key) != std::string::npos;
         });
     }
 private:
     std::vector<std::string> keys;
 };
-bool is_question(std::string &str) {
-    // std::string s("？");
-    // if (str.find("?") >= 0 || str.find(UTF8TOGB(s)) >= 0) {
-    //     return true;
-    // }
-    return false;
-}
+
+
 int main()
 {
     // ATest atest;
@@ -122,6 +135,11 @@ int main()
     // BTest btest(1.2);
     // std::cout << btest.a << ' ' << btest.b << ' ' << btest.c << std::endl;
     std::string path("D:\\cppProject\\gitTest\\files");
+    std::cout << path << std::endl;
+    auto files = walk_through(path);
+    for (auto &p : files) {
+        std::cout << p << std::endl;
+    }
     std::map<int, std::map<std::string, std::string>> res;
     std::ifstream infile;
     infile.open("./files/file1.txt");
