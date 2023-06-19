@@ -1,10 +1,13 @@
-/*
+/**
  * Test about factory mode.
  */
 #include <iostream>
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <map>
+#include <fstream>
+
 
 #define TEST 1
 
@@ -34,7 +37,8 @@ class MoreTest {
 };
 
 
-int getEditDistance(std::string first, std::string second) {
+template <class T>
+int getEditDistance(T &first, T &second) {
     int m = first.length();
     int n = second.length();
     std::vector<std::vector<size_t>> record(m + 1, std::vector<size_t>(n + 1, 0));
@@ -54,7 +58,8 @@ int getEditDistance(std::string first, std::string second) {
     return record[m][n];
 }
 
-double StringSimilarity(std::string first, std::string second) {
+template <class T>
+double StringSimilarity(T &first, T &second) {
     double max_len = std::max(first.length(), second.length());
     if (max_len > 0) {
         return (max_len - getEditDistance(first, second)) / max_len;
@@ -70,6 +75,28 @@ int main()
     // std::cout << 2 << std::endl;
     // BTest btest(1.2);
     // std::cout << btest.a << ' ' << btest.b << ' ' << btest.c << std::endl;
-    std::cout << StringSimilarity("test", "log") << std::endl;
+    std::string path("D:\\cppProject\\gitTest\\files");
+    std::map<int, std::map<std::string, std::string>> res;
+    std::ifstream infile;
+    infile.open("./files/file1.txt");
+    std::string str;
+    while (std::getline(infile, str))
+    {
+        std::wstring wstr = 
+       std::cout << str << std::endl;
+    }
+    
+
+    std::wstring s(L"中国");
+    // std::wstring
+    // std::cout << s << std::endl;
+    std::cout << s.length() << std::endl;
+    // std::cout << s << std::endl;
+    // // std::cout << ws << std::endl;
+    // char *p = R"中国";
+    // std::cout << p << std::endl;
+    std::wstring s1(L"中国人 ");
+    std::wstring s2(L"中国 ");
+    std::cout << StringSimilarity(s1, s2) << std::endl;
     return 0;
 }
