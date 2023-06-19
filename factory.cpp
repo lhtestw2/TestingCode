@@ -1,6 +1,3 @@
-/**
- * Test about factory mode.
- */
 #include <iostream>
 #include <algorithm>
 #include <string>
@@ -11,39 +8,12 @@
 #include <windows.h>
 #include <io.h>
 #include <regex>
+#include <set>
 
-
-
-#define TEST 1
-
-class ATest {
-public:
-    float a;
-    int b;
-    ATest() : a(1.0), b(2) {}
-};
-
-class BTest : virtual public ATest {
-public:
-    float c;
-    BTest(float c) : ATest(), c(c) {}
-};
-
-class MoreTest {
-    int a;
-    double b;
-    MoreTest() : a(1), b(2.2) {}
-    void print() { std::cout << "this is a modify print" << std::endl; }
-    void print2() {}
-    void print3() {}
-    void print1() {}
-    void add_func() {}
-    void add_func1() { std::cout << "This is a test about snap." << std::endl; }
-};
 
 
 template <class T>
-int getEditDistance(T &first, T &second) {
+int getEditDistance(const T &first, const T &second) {
     int m = first.length();
     int n = second.length();
     std::vector<std::vector<size_t>> record(m + 1, std::vector<size_t>(n + 1, 0));
@@ -64,13 +34,14 @@ int getEditDistance(T &first, T &second) {
 }
 
 template <class T>
-double StringSimilarity(T &first, T &second) {
+double StringSimilarity(const T &first, const T &second) {
     double max_len = max(first.length(), second.length());
     if (max_len > 0) {
         return (max_len - getEditDistance(first, second)) / max_len;
     }
     return 1;
 }
+
 std::string UTF8TOGB(std::string &str) {
     int i = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, NULL, 0);
     WCHAR *strSrc = new WCHAR[i + 1];
@@ -102,6 +73,7 @@ std::vector<std::string> walk_through(const std::string &path) {
 }
 
 
+
 class Question {
 public:
     Question(std::string path) {
@@ -131,64 +103,70 @@ private:
 
 class Solver {
 public:
-    Solver(std::string path) {
+    Solver(std::string path, double thresh = 0.5) : thresh_(thresh) {
         path_list_ = std::move(walk_through(path));
         path_ = std::move(path);
     }
-    void first_read() {
+
+    void first_read(Question &question) {
+        std::ifstream infile;
         for (const auto &p : path_list_) {
             std::string abs_path = path_ + std::string("\\") + p;
-            std::cout << abs_path << std::endl;
+            infile.open(abs_path);
+            std::string str;
+            while (std::getline(infile, str)) {
+                str = UTF8TOGB(str);
+                if (question.is_question(str)) {
+                    bool flag = false;
+                    for (auto it1 = res_.begin(); it1 != res_.end(); ++it1) {  // std::pair<size_t, std::map<std::string, std::set<std::string>>>
+                        for (auto it2 = it1->second.begin(); it2 != it1->second.end(); ++it2) {  // std::pair<std::string, std::set<std::string>>
+                            for (auto it3 = it2->second.begin(); it3 != it2->second.end(); ++it3) {
+                                if (StringSimilarity(*it3, str) >= thresh_) {
+                                    it2->second.insert(str);
+                                    flag = true;
+                                    break;
+                                }
+                            }
+                            if (flag) { break; }
+                        }
+                        if (flag) { break; }
+                    }
+                    if (!flag) {
+                        res_[res_.size()][p].insert(str);
+                    }
+                }
+            }
+            infile.close();
+        }
+    }
+    void print_res() {
+        for (auto it1 = res_.begin(); it1 != res_.end(); ++it1) {
+            std::cout << it1->first << ":" << std::endl;
+            for (auto it2 = it1->second.begin(); it2 != it1->second.end(); ++it2) {
+                std::cout << "\t" << it2->first << ":" << std::endl;
+                for (auto it3 = it2->second.begin(); it3 != it2->second.end(); ++it3) {
+                    std::cout << "\t\t" << *it3 << std::endl;
+                } 
+            }
         }
     }
 private:
+    double thresh_;
     std::string path_;
     std::vector<std::string> path_list_;
-    std::map<size_t, std::map<std::string, std::string>> res_;
+    std::map<size_t, std::map<std::string, std::set<std::string>>> res_;
 };
 
 
 int main()
 {
-    // ATest atest;
-    // std::cout << atest.a << ' ' << atest.b << std::endl;
-    // std::cout << 2 << std::endl;
-    // BTest btest(1.2);
-    // std::cout << btest.a << ' ' << btest.b << ' ' << btest.c << std::endl;
-    std::string path("D:\\cppProject\\gitTest\\files");
-    std::cout << path << std::endl;
-    Solver readfile(path);
-    readfile.first_read();
-    auto files = walk_through(path);
-    for (auto &p : files) {
-        std::cout << p << std::endl;
-    }
-    std::map<int, std::map<std::string, std::string>> res;
-    std::ifstream infile;
-    infile.open("./files/file1.txt");
-    std::string str;
-    std::string key_path("./keys.txt");
-    Question q(key_path);
-    while (std::getline(infile, str))
-    {
-    //    int s = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, NULL, 0);
-    //    std::cout << s << std::endl;
-       std::cout << str << std::endl;
-       std::cout << UTF8TOGB(str) << std::endl;
-       std::cout << (q.is_question(UTF8TOGB(str)) ? "True" : "False") << std::endl;
-    }
-    
 
-    std::wstring s(L"中国");
-    // std::wstring
-    // std::cout << s << std::endl;
-    std::cout << s.length() << std::endl;
-    // std::cout << s << std::endl;
-    // // std::cout << ws << std::endl;
-    // char *p = R"中国";
-    // std::cout << p << std::endl;
-    std::wstring s1(L"中国人 ");
-    std::wstring s2(L"中国 ");
-    std::cout << StringSimilarity(s1, s2) << std::endl;
+    std::string path("files");
+    std::string key_path("./keys.txt");
+    Question question(key_path);
+    Solver readfile(path);
+    readfile.first_read(question);
+    readfile.print_res();
+
     return 0;
 }
