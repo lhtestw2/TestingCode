@@ -86,7 +86,7 @@ std::string UTF8TOGB(std::string &str) {
 }
 
 
-std::vector<std::string> walk_through(std::string path) {
+std::vector<std::string> walk_through(const std::string &path) {
     std::vector<std::string> res;
     std::string findFile = path + std::string("\\*");
     _finddata_t FileInfo;
@@ -94,7 +94,8 @@ std::vector<std::string> walk_through(std::string path) {
     do {
         auto file_name = std::string(FileInfo.name);
         if (file_name != ".." && file_name != ".") {
-            res.push_back(path + std::string("\\") + file_name);
+            // res.push_back(path + std::string("\\") + file_name);
+            res.push_back(file_name);
         }
     } while (_findnext(handle_, &FileInfo) == 0);
     return res;
@@ -103,27 +104,47 @@ std::vector<std::string> walk_through(std::string path) {
 
 class Question {
 public:
-    Question(std::string &path) {
+    Question(std::string path) {
         std::ifstream infile;
         infile.open(path);
         std::string str;
         while (std::getline(infile, str)) {
             if (str.length()) {
-                keys.push_back(UTF8TOGB(str));
+                keys_.push_back(UTF8TOGB(str));
             }
         }
-        for (auto &p : keys) {
-            std::cout << p << std::endl;
-        }
+        // for (auto &p : keys_) {
+        //     std::cout << p << std::endl;
+        // }
+        path_ = std::move(path);
     }
-    bool is_question(std::string str) {
+    bool is_question(const std::string &str) {
 
-        return std::any_of(keys.cbegin(), keys.cend(), [&str](const std::string key) {
+        return std::any_of(keys_.cbegin(), keys_.cend(), [&str](const std::string key) {
             return str.find(key) != std::string::npos;
         });
     }
 private:
-    std::vector<std::string> keys;
+    std::vector<std::string> keys_;
+    std::string path_;
+};
+
+class Solver {
+public:
+    Solver(std::string path) {
+        path_list_ = std::move(walk_through(path));
+        path_ = std::move(path);
+    }
+    void first_read() {
+        for (const auto &p : path_list_) {
+            std::string abs_path = path_ + std::string("\\") + p;
+            std::cout << abs_path << std::endl;
+        }
+    }
+private:
+    std::string path_;
+    std::vector<std::string> path_list_;
+    std::map<size_t, std::map<std::string, std::string>> res_;
 };
 
 
@@ -136,6 +157,8 @@ int main()
     // std::cout << btest.a << ' ' << btest.b << ' ' << btest.c << std::endl;
     std::string path("D:\\cppProject\\gitTest\\files");
     std::cout << path << std::endl;
+    Solver readfile(path);
+    readfile.first_read();
     auto files = walk_through(path);
     for (auto &p : files) {
         std::cout << p << std::endl;
