@@ -5,8 +5,11 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <atlstr.h>
 #include <map>
 #include <fstream>
+#include <windows.h>
+
 
 
 #define TEST 1
@@ -51,7 +54,7 @@ int getEditDistance(T &first, T &second) {
     for (int i = 1; i <= m; ++i) {
         for (int j = 1; j <= n; ++j) {
             size_t weight = first[i - 1] == second[j - 1] ? 0 : 1;
-            record[i][j] = std::min(std::min(record[i - 1][j] + 1, record[i][j - 1] + 1), 
+            record[i][j] = min(min(record[i - 1][j] + 1, record[i][j - 1] + 1), 
             record[i - 1][j - 1] + weight);
         }
     }
@@ -60,13 +63,25 @@ int getEditDistance(T &first, T &second) {
 
 template <class T>
 double StringSimilarity(T &first, T &second) {
-    double max_len = std::max(first.length(), second.length());
+    double max_len = max(first.length(), second.length());
     if (max_len > 0) {
         return (max_len - getEditDistance(first, second)) / max_len;
     }
     return 1;
 }
+std::string UTF8TOGB(std::string &str) {
+    int i = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, NULL, 0);
+    WCHAR *strSrc = new WCHAR[i + 1];
+    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, strSrc, i);
 
+    i = WideCharToMultiByte(CP_ACP, 0, strSrc, -1, NULL, 0, NULL, NULL);
+    LPSTR szRes = new CHAR[i + 1];
+    WideCharToMultiByte(CP_ACP, 0, strSrc, -1, szRes, i, NULL, NULL);
+    std::string result = szRes;
+    delete []strSrc;
+    delete []szRes;
+    return result;
+}
 
 int main()
 {
@@ -82,8 +97,10 @@ int main()
     std::string str;
     while (std::getline(infile, str))
     {
-        std::wstring wstr = 
+    //    int s = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, NULL, 0);
+    //    std::cout << s << std::endl;
        std::cout << str << std::endl;
+       std::cout << UTF8TOGB(str) << std::endl;
     }
     
 
