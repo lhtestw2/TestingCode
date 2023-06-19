@@ -134,7 +134,7 @@ int main()
     // std::cout << 2 << std::endl;
     // BTest btest(1.2);
     // std::cout << btest.a << ' ' << btest.b << ' ' << btest.c << std::endl;
-    std::string path("D:\\cppProject\\gitTest\\files");
+    std::string path("files");
     std::cout << path << std::endl;
     auto files = walk_through(path);
     for (auto &p : files) {
