@@ -67,6 +67,7 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "fstream": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "set": "cpp"
     }
 }

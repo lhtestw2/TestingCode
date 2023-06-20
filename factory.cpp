@@ -115,6 +115,7 @@ public:
             infile.open(abs_path);
             std::string str;
             while (std::getline(infile, str)) {
+                if (str.length() == 0) { continue; }
                 str = UTF8TOGB(str);
                 if (question.is_question(str)) {
                     bool flag = false;
@@ -122,7 +123,7 @@ public:
                         for (auto it2 = it1->second.begin(); it2 != it1->second.end(); ++it2) {  // std::pair<std::string, std::set<std::string>>
                             for (auto it3 = it2->second.begin(); it3 != it2->second.end(); ++it3) {
                                 if (StringSimilarity(*it3, str) >= thresh_) {
-                                    it2->second.insert(str);
+                                    it1->second[p].insert(str);
                                     flag = true;
                                     break;
                                 }
@@ -135,6 +136,33 @@ public:
                         res_[res_.size()][p].insert(str);
                     }
                 }
+            }
+            infile.close();
+        }
+    }
+    void second_read(Question &question) {
+        std::ifstream infile;
+        for (const auto &p : path_list_) {
+            std::string abs_path = path_ + std::string("\\") + p;
+            infile.open(abs_path);
+            std::string str;
+            while (std::getline(infile, str)) {
+                if (str.length() == 0) { continue; }
+                str = UTF8TOGB(str);
+                bool flag = false;
+                for (auto it1 = res_.begin(); it1 != res_.end(); ++it1) {  // std::pair<size_t, std::map<std::string, std::set<std::string>>>
+                    for (auto it2 = it1->second.begin(); it2 != it1->second.end(); ++it2) {  // std::pair<std::string, std::set<std::string>>
+                        for (auto it3 = it2->second.begin(); it3 != it2->second.end(); ++it3) {
+                            if (StringSimilarity(*it3, str) >= thresh_) {
+                                it1->second[p].insert(str);
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (flag) { break; }
+                    }
+                    if (flag) { break; }
+                }             
             }
             infile.close();
         }
@@ -166,6 +194,8 @@ int main()
     Question question(key_path);
     Solver readfile(path);
     readfile.first_read(question);
+    readfile.print_res();
+    readfile.second_read(question);
     readfile.print_res();
 
     return 0;
