@@ -68,6 +68,19 @@
         "xutility": "cpp",
         "fstream": "cpp",
         "regex": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "cinttypes": "cpp",
+        "condition_variable": "cpp",
+        "csignal": "cpp",
+        "cstdarg": "cpp",
+        "deque": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "functional": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "xhash": "cpp"
     }
 }
