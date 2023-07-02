@@ -14,11 +14,11 @@
 #include <filesystem>
 
 #ifdef _DEBUG
-#pragma comment(lib,"D:\\mupdf\\mupdf\\platform\\win32\\Debug\\libmupdf.lib")
-#pragma comment(lib,"D:\\mupdf\\mupdf\\platform\\win32\\Debug\\libthirdparty.lib")
+#pragma comment(lib,"C:\\Users\\haol\\mupdf\\platform\\win32\\Debug\\libmupdf.lib")
+#pragma comment(lib,"C:\\Users\\haol\\mupdf\\win32\\Debug\\libthirdparty.lib")
 #else
-#pragma comment(lib,"D:\\mupdf\\mupdf\\platform\\win32\\Release\\libmupdf.lib")
-#pragma comment(lib,"D:\\mupdf\\mupdf\\platform\\win32\\Release\\libthirdparty.lib")
+#pragma comment(lib,"C:\\Users\\haol\\mupdf\\platform\\win32\\Release\\libmupdf.lib")
+#pragma comment(lib,"C:\\Users\\haol\\mupdf\\platform\\win32\\Release\\libthirdparty.lib")
 #endif
 
 template <class T>
@@ -364,6 +364,7 @@ int main(int argc, char **argv)
         // readfile.second_read(question);
         // readfile.print_res();
         readfile.store_res(std::string("./res_nospace_") + std::to_string(i) + std::string(".csv"));
+        break;
     }
 	
     // std::cout << std::to_string(5) << std::endl;
