@@ -1,8 +1,7 @@
-factory.exe
-factory.ilk
-factory.obj
-factory.pdb
+*.exe
+*.ilk
+*.obj
+*.pdb
 res*
 test*
-vc140.pdb
 files*
