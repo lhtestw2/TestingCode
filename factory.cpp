@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     //     output_file.close();  
     // }
 
-    for (int i = 1; i < 7; ++i) {
+    for (int i = 3; i < 7; ++i) {
         FileExtract::Solver readfile(prefix, 0.1 * i);
         readfile.first_read(parser);
         // readfile.print_res();
